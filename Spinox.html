@@ -1,119 +1,140 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Activation Portal | SPINOX GUL</title>
+    <title>بوابة تفعيل المود | SPINOX GUL</title>
     <style>
-        body { background: #0f0f13; color: #fff; font-family: system-ui, sans-serif; text-align: center; padding-top: 60px; margin: 0; }
-        .card { background: #17181f; padding: 40px; display: inline-block; border-radius: 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.5); border: 1px solid #232430; max-width: 400px; width: 85%; }
-        h1 { color: #f39c12; font-size: 24px; margin-bottom: 20px; text-align: center; }
-        p { color: #a0a0b0; font-size: 15px; line-height: 1.6; text-align: center; }
-        
-        /* Radio button design */
-        .options-container { margin: 25px 0; }
-        .radio-option { background: #1f2029; padding: 15px; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; cursor: pointer; border: 1px solid #2d2f3f; transition: 0.2s; }
-        .radio-option:hover { border-color: #f39c12; }
-        .radio-option input { margin-right: 15px; width: 18px; height: 18px; accent-color: #f39c12; }
-        .radio-label { font-size: 16px; font-weight: bold; text-align: left; }
-
-        /* Buttons and Spinner */
-        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
-        .btn-activate, .btn-youtube { color: #fff; border: none; padding: 12px 20px; font-size: 15px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.2s; flex: 1; }
-        .btn-activate { background: #2ecc71; }
-        .btn-activate:hover { background: #27ae60; }
-        .btn-youtube { background: #ff0000; }
-        .btn-youtube:hover { background: #cc0000; }
-        .spinner { border: 4px solid #1f2029; border-top: 4px solid #f39c12; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; display: none; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .status-text { margin-top: 15px; font-weight: bold; text-align: center; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: #0f0f13; color: #fff; font-family: system-ui, sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .card { background: #17181f; padding: 36px 28px; border-radius: 18px; box-shadow: 0 8px 32px rgba(0,0,0,0.6); border: 1px solid #232430; max-width: 420px; width: 100%; }
+        h1 { color: #f39c12; font-size: 22px; margin-bottom: 10px; text-align: center; }
+        .subtitle { color: #7a7a9a; font-size: 14px; text-align: center; margin-bottom: 24px; line-height: 1.6; }
+        .hwid-box { background: #1a1b24; border: 1px solid #2d2f3f; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #5a5a7a; word-break: break-all; margin-bottom: 22px; text-align: left; direction: ltr; }
+        .hwid-box span { color: #4a9eff; }
+        .options-container { margin-bottom: 20px; }
+        .radio-option { background: #1f2029; padding: 14px 16px; border-radius: 10px; margin-bottom: 10px; display: flex; align-items: center; cursor: pointer; border: 2px solid #2d2f3f; transition: 0.2s; }
+        .radio-option:hover { border-color: #f39c12; background: #23242e; }
+        .radio-option input { margin-left: 14px; width: 18px; height: 18px; accent-color: #f39c12; flex-shrink: 0; }
+        .radio-label { font-size: 15px; font-weight: bold; }
+        .radio-sub { font-size: 12px; color: #7a7a9a; margin-top: 3px; }
+        .btn-activate { background: linear-gradient(135deg, #2ecc71, #27ae60); color: #fff; border: none; padding: 15px; font-size: 16px; font-weight: bold; border-radius: 10px; cursor: pointer; width: 100%; transition: 0.2s; letter-spacing: 0.5px; }
+        .btn-activate:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-activate:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .spinner-wrap { display: none; flex-direction: column; align-items: center; padding: 20px 0; }
+        .spinner { border: 3px solid #1f2029; border-top: 3px solid #f39c12; border-radius: 50%; width: 36px; height: 36px; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .status-text { margin-top: 14px; font-size: 15px; font-weight: bold; text-align: center; padding: 12px; border-radius: 8px; display: none; }
+        .status-success { background: #0d2e1a; color: #2ecc71; border: 1px solid #2ecc71; }
+        .status-error   { background: #2e0d0d; color: #e74c3c; border: 1px solid #e74c3c; }
+        .status-loading { background: #2e2a0d; color: #f1c40f; border: 1px solid #f1c40f; }
+        .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #3a3a5a; }
     </style>
 </head>
 <body>
+<div class="card">
+    <h1>🚀 بوابة التفعيل الذكية</h1>
+    <p class="subtitle">لقد تخطيت الرابط بنجاح!<br>اختر مدة التفعيل واضغط تفعيل.</p>
 
-    <div class="card">
-        <h1>Smart Activation Portal 🚀</h1>
-        <p>You've successfully accessed the link! Choose your activation duration and click the activation button.</p>
-        
-        <div class="options-container" id="optionsGroup">
-            <label class="radio-option">
-                <input type="radio" name="duration" value="2" checked>
-                <span class="radio-label">Free activation for 48 hours (2 days)</span>
-            </label>
-            <label class="radio-option">
-                <input type="radio" name="duration" value="7">
-                <span class="radio-label">Free activation for 7 days (1 week)</span>
-            </label>
-        </div>
-
-        <div class="btn-group">
-            <button id="authBtn" class="btn-activate" onclick="processActivation()">Activate Now</button>
-            <button class="btn-youtube" onclick="openYouTube()">📺 Channel</button>
-        </div>
-        
-        <div id="loader" class="spinner"></div>
-        <div id="statusMsg" class="status-text"></div>
+    <div class="hwid-box">
+        معرف جهازك: <span id="hwidDisplay">جاري التحميل...</span>
     </div>
 
-    <script>
-        // Get HWID from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const hwid = urlParams.get('hwid');
+    <div class="options-container" id="optionsGroup">
+        <label class="radio-option">
+            <input type="radio" name="duration" value="2" checked>
+            <div>
+                <div class="radio-label">⚡ تفعيل 48 ساعة</div>
+                <div class="radio-sub">يومان كاملان مجاناً</div>
+            </div>
+        </label>
+        <label class="radio-option">
+            <input type="radio" name="duration" value="7">
+            <div>
+                <div class="radio-label">🌟 تفعيل 7 أيام</div>
+                <div class="radio-sub">أسبوع كامل مجاناً</div>
+            </div>
+        </label>
+    </div>
 
-        // Supabase settings (Put your real ANON KEY here)
-        const SUPABASE_URL = "https://loxrjtxljiqnhvmphzyr.supabase.co";
-        const ANON_KEY = "PUT_YOUR_ANON_KEY_HERE"; 
+    <button id="authBtn" class="btn-activate" onclick="processActivation()">
+        ✅ تفعيل الأداة الآن
+    </button>
 
-        function processActivation() {
-            if (!hwid) {
-                showStatus("❌ Error: Device ID (HWID) is missing from the URL!", "#e74c3c");
-                return;
-            }
+    <div class="spinner-wrap" id="spinnerWrap">
+        <div class="spinner"></div>
+    </div>
 
-            // Get selected duration from radio button
-            const selectedDays = document.querySelector('input[name="duration"]:checked').value;
+    <div id="statusMsg" class="status-text"></div>
 
-            // Hide elements and show spinner
-            document.getElementById('authBtn').style.display = 'none';
-            document.getElementById('optionsGroup').style.display = 'none';
-            document.getElementById('loader').style.display = 'block';
-            showStatus("Connecting to server and activating your device...", "#f1c40f");
+    <div class="footer">SPINOX GUL © 2026</div>
+</div>
 
-            // Send request to server
-            fetch(`${SUPABASE_URL}/rest/v1/rpc/activate_device_custom`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': ANON_KEY,
-                    'Authorization': `Bearer ${ANON_KEY}`
-                },
-                body: JSON.stringify({ p_hwid: hwid, p_days: parseInt(selectedDays) })
-            })
-            .then(res => {
-                document.getElementById('loader').style.display = 'none';
-                if(res.ok) {
-                    showStatus("✓ Tool activated successfully! You can now use the mod.", "#2ecc71");
-                } else {
-                    showStatus("❌ Activation failed: Server error.", "#e74c3c");
-                    document.getElementById('authBtn').style.display = 'block';
-                }
-            })
-            .catch(err => {
-                document.getElementById('loader').style.display = 'none';
-                showStatus("❌ Error: Failed to connect to server.", "#e74c3c");
+<script>
+    const SUPABASE_URL = "https://loxrjtxljiqnhvmphzyr.supabase.co";
+    const ANON_KEY     = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxveHJqdHhsamlxbmh2bXBoenlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxNDI3MzQsImV4cCI6MjA5NDcxODczNH0.CT0Nk9OHL6u9Hwo69L9Wi2ulKHZfdxusOOI6hWkj7Ms";
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const hwid      = urlParams.get('hwid');
+
+    // عرض الـ HWID
+    document.getElementById('hwidDisplay').innerText = hwid || 'غير موجود!';
+
+    function showStatus(text, type) {
+        const el = document.getElementById('statusMsg');
+        el.innerText   = text;
+        el.className   = 'status-text status-' + type;
+        el.style.display = 'block';
+    }
+
+    function processActivation() {
+        if (!hwid) {
+            showStatus("❌ خطأ: رمز الجهاز مفقود من الرابط!", "error");
+            return;
+        }
+
+        const days = parseInt(document.querySelector('input[name="duration"]:checked').value);
+
+        // إخفاء الأزرار وإظهار السبينر
+        document.getElementById('authBtn').disabled   = true;
+        document.getElementById('authBtn').style.display = 'none';
+        document.getElementById('optionsGroup').style.display = 'none';
+        document.getElementById('spinnerWrap').style.display  = 'flex';
+        showStatus("⏳ جاري تفعيل جهازك...", "loading");
+
+        fetch(`${SUPABASE_URL}/rest/v1/rpc/activate_device_custom`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'apikey':        ANON_KEY,
+                'Authorization': 'Bearer ' + ANON_KEY
+            },
+            body: JSON.stringify({ p_hwid: hwid, p_days: days })
+        })
+        .then(res => {
+            document.getElementById('spinnerWrap').style.display = 'none';
+            if (res.ok) {
+                showStatus(
+                    days === 2
+                        ? "✅ تم التفعيل! أداتك نشطة لمدة 48 ساعة. عد للمود الآن."
+                        : "✅ تم التفعيل! أداتك نشطة لمدة 7 أيام. عد للمود الآن.",
+                    "success"
+                );
+            } else {
+                showStatus("❌ فشل التفعيل. حاول مجدداً.", "error");
                 document.getElementById('authBtn').style.display = 'block';
-            });
-        }
-
-        function openYouTube() {
-            window.open('https://youtube.com/@guissemola?si=Fjp3eZQ-Ubz-s9O8', '_blank');
-        }
-
-        function showStatus(text, color) {
-            const msg = document.getElementById('statusMsg');
-            msg.innerText = text;
-            msg.style.color = color;
-        }
-    </script>
+                document.getElementById('authBtn').disabled = false;
+                document.getElementById('optionsGroup').style.display = 'block';
+            }
+        })
+        .catch(() => {
+            document.getElementById('spinnerWrap').style.display = 'none';
+            showStatus("❌ فشل الاتصال بالسيرفر.", "error");
+            document.getElementById('authBtn').style.display = 'block';
+            document.getElementById('authBtn').disabled = false;
+            document.getElementById('optionsGroup').style.display = 'block';
+        });
+    }
+</script>
 </body>
 </html>
