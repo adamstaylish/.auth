@@ -1,25 +1,29 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة تفعيل المود | SPINOX GUL</title>
+    <title>Activation Portal | SPINOX GUL</title>
     <style>
         body { background: #0f0f13; color: #fff; font-family: system-ui, sans-serif; text-align: center; padding-top: 60px; margin: 0; }
-        .card { background: #17181f; padding: 40px; display: inline-block; border-radius: 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.5); border: 1px solid #232430; max-width: 400px; width: 85%; text-align: right; }
+        .card { background: #17181f; padding: 40px; display: inline-block; border-radius: 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.5); border: 1px solid #232430; max-width: 400px; width: 85%; }
         h1 { color: #f39c12; font-size: 24px; margin-bottom: 20px; text-align: center; }
         p { color: #a0a0b0; font-size: 15px; line-height: 1.6; text-align: center; }
         
-        /* تصميم الراديو بوتون */
+        /* Radio button design */
         .options-container { margin: 25px 0; }
         .radio-option { background: #1f2029; padding: 15px; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; cursor: pointer; border: 1px solid #2d2f3f; transition: 0.2s; }
         .radio-option:hover { border-color: #f39c12; }
-        .radio-option input { margin-left: 15px; width: 18px; height: 18px; accent-color: #f39c12; }
-        .radio-label { font-size: 16px; font-weight: bold; }
+        .radio-option input { margin-right: 15px; width: 18px; height: 18px; accent-color: #f39c12; }
+        .radio-label { font-size: 16px; font-weight: bold; text-align: left; }
 
-        /* زر التفعيل والسبينر */
-        .btn-activate { background: #2ecc71; color: #fff; border: none; padding: 14px 30px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.2s; width: 100%; margin-top: 10px; }
+        /* Buttons and Spinner */
+        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
+        .btn-activate, .btn-youtube { color: #fff; border: none; padding: 12px 20px; font-size: 15px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.2s; flex: 1; }
+        .btn-activate { background: #2ecc71; }
         .btn-activate:hover { background: #27ae60; }
+        .btn-youtube { background: #ff0000; }
+        .btn-youtube:hover { background: #cc0000; }
         .spinner { border: 4px solid #1f2029; border-top: 4px solid #f39c12; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; display: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .status-text { margin-top: 15px; font-weight: bold; text-align: center; }
@@ -28,51 +32,54 @@
 <body>
 
     <div class="card">
-        <h1>بوابة التفعيل الذكية 🚀</h1>
-        <p>لقد تخطيت الرابط بنجاح! اختر مدة التفعيل التي تريدها واضغط على زر التفعيل المباشر.</p>
+        <h1>Smart Activation Portal 🚀</h1>
+        <p>You've successfully accessed the link! Choose your activation duration and click the activation button.</p>
         
         <div class="options-container" id="optionsGroup">
             <label class="radio-option">
                 <input type="radio" name="duration" value="2" checked>
-                <span class="radio-label">تفعيل مجاني لمدة 48 ساعة (يومين)</span>
+                <span class="radio-label">Free activation for 48 hours (2 days)</span>
             </label>
             <label class="radio-option">
                 <input type="radio" name="duration" value="7">
-                <span class="radio-label">تفعيل مجاني لمدة 7 أيام (أسبوع كامل)</span>
+                <span class="radio-label">Free activation for 7 days (1 week)</span>
             </label>
         </div>
 
-        <button id="authBtn" class="btn-activate" onclick="processActivation()">تفعيل الأداة الآن</button>
+        <div class="btn-group">
+            <button id="authBtn" class="btn-activate" onclick="processActivation()">Activate Now</button>
+            <button class="btn-youtube" onclick="openYouTube()">📺 Channel</button>
+        </div>
         
         <div id="loader" class="spinner"></div>
         <div id="statusMsg" class="status-text"></div>
     </div>
 
     <script>
-        // جلب الـ HWID من الرابط
+        // Get HWID from URL
         const urlParams = new URLSearchParams(window.location.search);
         const hwid = urlParams.get('hwid');
 
-        // إعدادات سوبابيس (ضع مفتاح الـ ANON KEY الحقيقي الخاص بك هنا)
+        // Supabase settings (Put your real ANON KEY here)
         const SUPABASE_URL = "https://loxrjtxljiqnhvmphzyr.supabase.co";
-        const ANON_KEY = "ضع_هنا_مفتاح_الـ_ANON_KEY_الخاص_بمشروعك"; 
+        const ANON_KEY = "PUT_YOUR_ANON_KEY_HERE"; 
 
         function processActivation() {
             if (!hwid) {
-                showStatus("❌ خطأ: رمز الجهاز (HWID) مفقود من الرابط!", "#e74c3c");
+                showStatus("❌ Error: Device ID (HWID) is missing from the URL!", "#e74c3c");
                 return;
             }
 
-            // معرفة الخيار المحدد من الراديو بوتون
+            // Get selected duration from radio button
             const selectedDays = document.querySelector('input[name="duration"]:checked').value;
 
-            // إخفاء العناصر وإظهار السبينر
+            // Hide elements and show spinner
             document.getElementById('authBtn').style.display = 'none';
-            document.getElementById('optionsGroup').style.style = 'none'; // إخفاء الخيارات أثناء التفعيل
+            document.getElementById('optionsGroup').style.display = 'none';
             document.getElementById('loader').style.display = 'block';
-            showStatus("جاري الاتصال بالقاعدة وتفعيل جهازك...", "#f1c40f");
+            showStatus("Connecting to server and activating your device...", "#f1c40f");
 
-            // إرسال الطلب للسيرفر
+            // Send request to server
             fetch(`${SUPABASE_URL}/rest/v1/rpc/activate_device_custom`, {
                 method: 'POST',
                 headers: {
@@ -85,17 +92,21 @@
             .then(res => {
                 document.getElementById('loader').style.display = 'none';
                 if(res.ok) {
-                    showStatus("✓ تم تفعيل الأداة بنجاح! يمكنك العودة للمود الآن.", "#2ecc71");
+                    showStatus("✓ Tool activated successfully! You can now use the mod.", "#2ecc71");
                 } else {
-                    showStatus("❌ فشل التفعيل: هناك مشكلة في استجابة السيرفر.", "#e74c3c");
+                    showStatus("❌ Activation failed: Server error.", "#e74c3c");
                     document.getElementById('authBtn').style.display = 'block';
                 }
             })
             .catch(err => {
                 document.getElementById('loader').style.display = 'none';
-                showStatus("❌ خطأ: فشل الاتصال بالسيرفر.", "#e74c3c");
+                showStatus("❌ Error: Failed to connect to server.", "#e74c3c");
                 document.getElementById('authBtn').style.display = 'block';
             });
+        }
+
+        function openYouTube() {
+            window.open('https://youtube.com/@guissemola?si=Fjp3eZQ-Ubz-s9O8', '_blank');
         }
 
         function showStatus(text, color) {
