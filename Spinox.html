@@ -51,7 +51,7 @@
 
         .status-text { margin-top: 14px; font-size: 15px; font-weight: bold;
                        text-align: center; padding: 12px; border-radius: 8px;
-                       display: none; }
+                       display: none; white-space: pre-line; }
         .status-success { background: #0d2e1a; color: #2ecc71; border: 1px solid #2ecc71; }
         .status-error   { background: #2e0d0d; color: #e74c3c; border: 1px solid #e74c3c; }
         .status-loading { background: #2e2a0d; color: #f1c40f; border: 1px solid #f1c40f; }
@@ -66,7 +66,7 @@
     <div class="token-box">
         رمز التفعيل: <span id="tokenDisplay">...</span>
     </div>
-    <p class="token-warn">⚠ هذا الرمز صالح لمدة 15 دقيقة فقط ولمرة واحدة</p>
+    <p class="token-warn">⚠ هذا الرمز صالح ولمرة واحدة فقط</p>
 
     <div class="options-container" id="optionsGroup">
         <label class="radio-option">
@@ -104,11 +104,14 @@
     const urlParams = new URLSearchParams(window.location.search);
     const token     = urlParams.get('token');
 
-    // عرض الـ token
-    document.getElementById('tokenDisplay').innerText = token || 'غير موجود!';
+    // تنظيف التوكن من المسافات وعلامات التنصيص التي قد تسببها مواقع الاختصار
+    const cleanToken = token ? token.trim().replace(/['"]+/g, '') : null;
+
+    // عرض الـ token المنظف في الصفحة
+    document.getElementById('tokenDisplay').innerText = cleanToken || 'غير موجود!';
 
     // إذا لا يوجد token أظهر خطأ فوراً
-    if (!token) {
+    if (!cleanToken) {
         showStatus("❌ رمز التفعيل مفقود! احصل على رابط جديد من الأداة.", "error");
         document.getElementById('authBtn').disabled = true;
         document.getElementById('optionsGroup').style.display = 'none';
@@ -122,13 +125,12 @@
     }
 
     function processActivation() {
-        if (!token) {
+        if (!cleanToken) {
             showStatus("❌ رمز التفعيل مفقود!", "error");
             return;
         }
 
-        const days = parseInt(
-            document.querySelector('input[name="duration"]:checked').value);
+        const days = parseInt(document.querySelector('input[name="duration"]:checked').value);
 
         document.getElementById('authBtn').disabled          = true;
         document.getElementById('authBtn').style.display     = 'none';
@@ -136,14 +138,16 @@
         document.getElementById('spinnerWrap').style.display  = 'flex';
         showStatus("⏳ جاري تفعيل جهازك...", "loading");
 
+        // إرسال الطلب بشكل صريح ومتوافق مع PostgreSQL RPC تماماً
         fetch(`${SUPABASE_URL}/rest/v1/rpc/activate_by_token`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'apikey':        ANON_KEY,
-                'Authorization': 'Bearer ' + ANON_KEY
+                'Authorization': 'Bearer ' + ANON_KEY,
+                'Prefer':        'params=single-object' // تضمن إرسال الـ JSON كـ Object مفرّد للدالة
             },
-            body: JSON.stringify({ p_token: token, p_days: days })
+            body: JSON.stringify({ "p_token": cleanToken, "p_days": days })
         })
         .then(res => res.text().then(text => ({ ok: res.ok, text })))
         .then(({ ok, text }) => {
@@ -153,15 +157,15 @@
             if (ok && result === 'ok') {
                 showStatus(
                     days === 2
-                        ? "✅ تم التفعيل! أداتك نشطة لمدة 48 ساعة.\nعد للمود الآن 🎮"
-                        : "✅ تم التفعيل! أداتك نشطة لمدة 7 أيام.\nعد للمود الآن 🎮",
+                        ? "✅ تم التفعيل بنجاح!\nأداتك نشطة الآن لمدة 48 ساعة.\nيمكنك العودة للمود الآن 🎮"
+                        : "✅ تم التفعيل بنجاح!\nأداتك نشطة الآن لمدة 7 أيام.\nيمكنك العودة للمود الآن 🎮",
                     "success");
             } else if (result === 'expired') {
-                showStatus("⏰ انتهت صلاحية الرمز! احصل على رابط جديد من الأداة.", "error");
+                showStatus("⏰ انتهت صلاحية الرمز (مر عليه وقت طويل)! احصل على رابط جديد من الأداة.", "error");
             } else if (result === 'invalid') {
                 showStatus("❌ رمز غير صالح أو تم استخدامه مسبقاً!", "error");
             } else {
-                showStatus("❌ فشل التفعيل. حاول مجدداً.", "error");
+                showStatus("❌ فشل التفعيل. رد السيرفر: " + result, "error");
                 document.getElementById('authBtn').style.display = 'block';
                 document.getElementById('authBtn').disabled = false;
                 document.getElementById('optionsGroup').style.display = 'block';
@@ -169,7 +173,7 @@
         })
         .catch(() => {
             document.getElementById('spinnerWrap').style.display = 'none';
-            showStatus("❌ فشل الاتصال بالسيرفر.", "error");
+            showStatus("❌ فشل الاتصال بالسيرفر. تحقق من الإنترنت.", "error");
             document.getElementById('authBtn').style.display = 'block';
             document.getElementById('authBtn').disabled = false;
             document.getElementById('optionsGroup').style.display = 'block';
