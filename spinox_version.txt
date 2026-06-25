@@ -1,10 +1,6 @@
-3.0
-https://www.mediafire.com/file/wg17qem06aqbs8d/Tool+3.0+SPINOX.zip/TOOL6464
-ADD TOOL AUTHER GAMES,
-FAKE PRO ,
-FAKE INFO PHONE 
-FIX : ESP CRASH , 
-TOOL64 ,
-MEMORY SEARCH
+3.1
+https://www.mediafire.com/file/shfu0ifh1rrlwqf/Tool+3.1+SPINOX.zip/file
+FIX STATIC HOOK 
+FIX TOUCH SCREEN 
  
 
