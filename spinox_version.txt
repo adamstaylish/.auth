@@ -1,6 +1,9 @@
-3.1
-https://www.mediafire.com/file/shfu0ifh1rrlwqf/Tool+3.1+SPINOX.zip/file
-FIX STATIC HOOK 
-FIX TOUCH SCREEN 
+3.5
+https://www.mediafire.com/file/ml2ffw9nwhk2dw6/Tool+3.5+SPINOX.zip/file
+ADD SAVE CODE TOOL
+ADD HOOK OBJECT
+ADD HOOK BRIDGE
+ADD SCREEN BUY KEY
+FIX LIB ENCRYPTED
  
 
