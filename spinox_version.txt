@@ -1,9 +1,4 @@
-3.5
-https://www.mediafire.com/file/ml2ffw9nwhk2dw6/Tool+3.5+SPINOX.zip/file
-ADD SAVE CODE TOOL
-ADD HOOK OBJECT
-ADD HOOK BRIDGE
-ADD SCREEN BUY KEY
-FIX LIB ENCRYPTED
- 
+3.6
+https://www.mediafire.com/file/57o5nvsp0hxu6jm/Tool+3.6+SPINOX.zip/file
+ALL METHODS HOOK FIX
 
