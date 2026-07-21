@@ -1,4 +1,7 @@
-3.6
-https://www.mediafire.com/file/57o5nvsp0hxu6jm/Tool+3.6+SPINOX.zip/file
-ALL METHODS HOOK FIX
-
+3.7
+https://www.mediafire.com/file/jvzvttc8ovy9os7/Tool+3.7+SPINOX.zip/file
+FIX ESP VECTOR3 
+OTHER LIBS TOOL
+SAVE CODE IMGUI/LGL
+FIX LOGGIN FREE LINK
+SAVE CODE MSHOOK,DOBYHOOK,A64HOOK
